@@ -66,36 +66,59 @@ const GamePage = props => {
         <div>
           <h3 className={responsiveTitle2}>Your team </h3>
           <hr />
-          {players.length !== 5 ? (
-            players.map((player, index) => (
-              <input
-                key={index}
-                value={player.name}
-                onClick={removePlayer(index)}
-                readOnly={true}
-                type="text"
-                name={player.name}
-                required
-              />
-            ))
-          ) : (
-            <form
-              name="play"
-              action="#"
-              method="post"
-              data-netlify="true"
-              data-netlify-honeypot="yekshemesh"
-            >
-              <input type="hidden" name="form-name" value="play" />
-              <input value={players[0].name} readOnly={true} type="text" name="Player 1" required />
-              <input value={players[1].name} readOnly={true} type="text" name="Player 2" required />
-              <input value={players[2].name} readOnly={true} type="text" name="Player 3" required />
-              <input value={players[3].name} readOnly={true} type="text" name="Player 4" required />
-              <input value={players[4].name} readOnly={true} type="text" name="Player 5" required />
-              <input type="hidden" name="yekshemesh" />
-              <button action="submit">Play</button>
-            </form>
-          )}
+          {/* {players.length !== 5 ? ( */}
+          {players.map((player, index) => (
+            <input
+              key={index}
+              value={player.name}
+              onClick={removePlayer(index)}
+              readOnly={true}
+              type="text"
+              name={player.name}
+              required
+            />
+          ))}
+          {/* ) : ( */}
+          <form name="play" method="post" data-netlify="true" data-netlify-honeypot="yekshemesh">
+            <input type="hidden" name="form-name" value="play" />
+            <input
+              value={players.length > 4 && players[0].name}
+              readOnly={true}
+              type="text"
+              name="Player 1"
+              required
+            />
+            <input
+              value={players.length > 4 && players[1].name}
+              readOnly={true}
+              type="text"
+              name="Player 2"
+              required
+            />
+            <input
+              value={players.length > 4 && players[2].name}
+              readOnly={true}
+              type="text"
+              name="Player 3"
+              required
+            />
+            <input
+              value={players.length > 4 && players[3].name}
+              readOnly={true}
+              type="text"
+              name="Player 4"
+              required
+            />
+            <input
+              value={players.length > 4 && players[4].name}
+              readOnly={true}
+              type="text"
+              name="Player 5"
+              required
+            />
+            <input type="hidden" name="yekshemesh" />
+            <button type="submit">Play</button>
+          </form>
         </div>
       </Container>
     </Layout>
