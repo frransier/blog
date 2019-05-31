@@ -66,7 +66,13 @@ const GamePage = props => {
         <div>
           <h3 className={responsiveTitle2}>Your team </h3>
           <hr />
-          <form name="play" method="post" data-netlify="true" data-netlify-honeypot="yekshemesh">
+          <form
+            name="play"
+            action="#"
+            method="post"
+            data-netlify="true"
+            data-netlify-honeypot="yekshemesh"
+          >
             <input type="hidden" name="form-name" value="play" />
             {players.map((player, index) => (
               <input
@@ -75,7 +81,7 @@ const GamePage = props => {
                 onClick={removePlayer(index)}
                 readOnly={true}
                 type="text"
-                name={index}
+                name={player.name}
                 id={index}
                 required
               />
