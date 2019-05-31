@@ -75,7 +75,7 @@ const GamePage = props => {
                 onClick={removePlayer(index)}
                 readOnly={true}
                 type="text"
-                name={`Player ${index + 1}`}
+                name={index}
                 id={index}
                 required
               />
