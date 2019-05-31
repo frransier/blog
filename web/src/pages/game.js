@@ -84,40 +84,40 @@ const GamePage = props => {
             <input
               value={players.length > 4 && players[0].name}
               readOnly={true}
-              type="text"
+              type="hidden"
               name="Player 1"
               required
             />
             <input
               value={players.length > 4 && players[1].name}
               readOnly={true}
-              type="text"
+              type="hidden"
               name="Player 2"
               required
             />
             <input
               value={players.length > 4 && players[2].name}
               readOnly={true}
-              type="text"
+              type="hidden"
               name="Player 3"
               required
             />
             <input
               value={players.length > 4 && players[3].name}
               readOnly={true}
-              type="text"
+              type="hidden"
               name="Player 4"
               required
             />
             <input
               value={players.length > 4 && players[4].name}
               readOnly={true}
-              type="text"
+              type="hidden"
               name="Player 5"
               required
             />
             <input type="hidden" name="yekshemesh" />
-            <button type="submit">Play</button>
+            {players.length === 5 && <button type="submit">Play</button>}
           </form>
         </div>
       </Container>
