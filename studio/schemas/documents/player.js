@@ -14,9 +14,9 @@ export default {
       title: 'Team'
     },
     {
-      name: 'id',
-      type: 'number',
-      title: 'Id'
+      name: 'included',
+      type: 'boolean',
+      title: 'Included'
     }
   ]
 }
