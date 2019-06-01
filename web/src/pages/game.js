@@ -12,12 +12,11 @@ import { responsiveTitle1, responsiveTitle2 } from "../components/typography.mod
 
 export const query = graphql`
   query GamePageQuery {
-    players: allSanityPlayer(sort: { fields: team }) {
+    players: allSanityPlayer(sort: { fields: team }, filter: { included: { eq: true } }) {
       edges {
         node {
           name
           team
-          id
         }
       }
     }
@@ -39,7 +38,7 @@ const GamePage = props => {
   const playerNodes = data && data.players && mapEdgesToNodes(data.players);
 
   useEffect(() => {
-    players.length === 5 ? setFullTeam(true) : setFullTeam(false);
+    players.length === 3 ? setFullTeam(true) : setFullTeam(false);
   }, [players]);
 
   const addPlayer = player => () => {
@@ -59,16 +58,20 @@ const GamePage = props => {
       <SEO title="Fantasy Football" />
       <Container>
         <div>
-          <h1>Matches 1/6 2019</h1>
-          <h4>Deadline 16:00</h4>
-          <p>IFK Göteborg - Örebro</p>
-          <p>Sirius - Djurgården</p>
-          <p>Falkenberg - Kalmar</p>
-          <p>Östersund - GIF Sundsvall</p>
+          <h1>Champions League-final</h1>
+          <h4>Deadline 21:00</h4>
+          <p>Liverpool - Tottenham</p>
+          <h4>Regler</h4>
+          <p>
+            Välj olika 5 spelare. <br /> Du får <strong>1p</strong> per{" "}
+            <strong>mål, assist, kort</strong> per spelare.
+          </p>
+          <p>Den eller de som får högst poäng delar på hela potten</p>
+          <p>Pott: 500kr</p>
         </div>
         <hr />
         <div>
-          <h2 className={responsiveTitle1}>Pick your players</h2>
+          <h2 className={responsiveTitle1}>Välj ditt jävla lag</h2>
 
           {playerNodes.map((player, index) => (
             <button style={buttonStyle} key={index} onClick={addPlayer(player)} readOnly={true}>
@@ -77,7 +80,7 @@ const GamePage = props => {
           ))}
         </div>
         <div>
-          <h3 className={responsiveTitle2}>Your team </h3>
+          <h3 className={responsiveTitle2}>Ditt jävla lag </h3>
           <hr />
           {players.map((player, index) => (
             <input
@@ -99,47 +102,47 @@ const GamePage = props => {
           >
             <input type="hidden" name="form-name" value="play" />
             <input
-              value={players.length > 4 && players[0].name}
+              value={players.length > 2 && players[0].name}
               readOnly={true}
               type="hidden"
               name="Player 1"
               required
             />
             <input
-              value={players.length > 4 && players[1].name}
+              value={players.length > 2 && players[1].name}
               readOnly={true}
               type="hidden"
               name="Player 2"
               required
             />
             <input
-              value={players.length > 4 && players[2].name}
+              value={players.length > 2 && players[2].name}
               readOnly={true}
               type="hidden"
               name="Player 3"
               required
             />
-            <input
-              value={players.length > 4 && players[3].name}
+            {/* <input
+              value={players.length > 2 && players[3].name}
               readOnly={true}
               type="hidden"
               name="Player 4"
               required
             />
             <input
-              value={players.length > 4 && players[4].name}
+              value={players.length > 2 && players[4].name}
               readOnly={true}
               type="hidden"
               name="Player 5"
               required
-            />
+            /> */}
             <input type="hidden" name="yekshemesh" />
             <hr />
             <div>
               <input
-                type={fullTeam ? "email" : "hidden"}
-                name="email"
-                placeholder="Enter your e-mail"
+                type={fullTeam ? "text" : "hidden"}
+                name="name"
+                placeholder="Skriv in ditt jävla namn"
                 required
               />{" "}
               {fullTeam && <button type="submit">Play</button>}
