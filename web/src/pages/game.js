@@ -12,11 +12,12 @@ import { responsiveTitle1, responsiveTitle2 } from "../components/typography.mod
 
 export const query = graphql`
   query GamePageQuery {
-    players: allSanityPlayer {
+    players: allSanityPlayer(sort: { fields: team }) {
       edges {
         node {
           name
           team
+          id
         }
       }
     }
@@ -51,12 +52,15 @@ const GamePage = props => {
     setPlayers([...dplayers]);
   };
 
+  var buttonStyle = { height: "50px" };
+
   return (
     <Layout>
-      <SEO title="Fantasy Football done right" />
+      <SEO title="Fantasy Football" />
       <Container>
         <div>
           <h1>Matches 1/6 2019</h1>
+          <h4>Deadline 16:00</h4>
           <p>IFK Göteborg - Örebro</p>
           <p>Sirius - Djurgården</p>
           <p>Falkenberg - Kalmar</p>
@@ -67,7 +71,7 @@ const GamePage = props => {
           <h2 className={responsiveTitle1}>Pick your players</h2>
 
           {playerNodes.map((player, index) => (
-            <button key={index} onClick={addPlayer(player)} readOnly={true}>
+            <button style={buttonStyle} key={index} onClick={addPlayer(player)} readOnly={true}>
               {player.name} <br /> {player.team}
             </button>
           ))}
