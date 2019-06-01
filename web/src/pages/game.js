@@ -52,7 +52,7 @@ const GamePage = props => {
     setPlayers([...dplayers]);
   };
 
-  var buttonStyle = { height: "50px" };
+  var buttonStyle = { WebkitAppearance: "none", margin: "2.5px" };
 
   return (
     <Layout>
