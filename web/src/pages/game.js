@@ -63,8 +63,8 @@ const GamePage = props => {
           <p>Liverpool - Tottenham</p>
           <h4>Regler</h4>
           <p>
-            Välj olika 5 spelare. <br /> Du får <strong>1p</strong> per{" "}
-            <strong>mål, assist, kort</strong> per spelare.
+            Välj 3 olika spelare. <br /> Du får <strong>1p</strong> per{" "}
+            <strong>mål, assist och kort</strong> per spelare.
           </p>
           <p>Den eller de som får högst poäng delar på hela potten</p>
           <p>Pott: 500kr</p>
