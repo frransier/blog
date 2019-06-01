@@ -16,7 +16,7 @@ export const query = graphql`
       edges {
         node {
           name
-          id
+          team
         }
       }
     }
@@ -34,14 +34,15 @@ const GamePage = props => {
   }
 
   const [players, setPlayers] = useState([]);
+  const [fullTeam, setFullTeam] = useState(false);
   const playerNodes = data && data.players && mapEdgesToNodes(data.players);
 
   useEffect(() => {
-    console.log(players);
+    players.length === 5 ? setFullTeam(true) : setFullTeam(false);
   }, [players]);
 
   const addPlayer = player => () => {
-    players.length < 5 ? setPlayers(prevPlayers => [...prevPlayers, player]) : null;
+    fullTeam ? null : setPlayers(prevPlayers => [...prevPlayers, player]);
   };
 
   const removePlayer = index => () => {
@@ -55,18 +56,25 @@ const GamePage = props => {
       <SEO title="Fantasy Football done right" />
       <Container>
         <div>
-          <h1 className={responsiveTitle1}>Pick your players</h1>
-          <hr />
+          <h1>Matches 1/6 2019</h1>
+          <p>IFK Göteborg - Örebro</p>
+          <p>Sirius - Djurgården</p>
+          <p>Falkenberg - Kalmar</p>
+          <p>Östersund - GIF Sundsvall</p>
+        </div>
+        <hr />
+        <div>
+          <h2 className={responsiveTitle1}>Pick your players</h2>
+
           {playerNodes.map((player, index) => (
             <button key={index} onClick={addPlayer(player)} readOnly={true}>
-              {player.name}
+              {player.name} <br /> {player.team}
             </button>
           ))}
         </div>
         <div>
           <h3 className={responsiveTitle2}>Your team </h3>
           <hr />
-          {/* {players.length !== 5 ? ( */}
           {players.map((player, index) => (
             <input
               key={index}
@@ -78,8 +86,13 @@ const GamePage = props => {
               required
             />
           ))}
-          {/* ) : ( */}
-          <form name="play" method="post" data-netlify="true" data-netlify-honeypot="yekshemesh">
+          <form
+            name="play"
+            method="post"
+            action="/welcome/"
+            data-netlify="true"
+            data-netlify-honeypot="yekshemesh"
+          >
             <input type="hidden" name="form-name" value="play" />
             <input
               value={players.length > 4 && players[0].name}
@@ -117,7 +130,16 @@ const GamePage = props => {
               required
             />
             <input type="hidden" name="yekshemesh" />
-            {players.length === 5 && <button type="submit">Play</button>}
+            <hr />
+            <div>
+              <input
+                type={fullTeam ? "email" : "hidden"}
+                name="email"
+                placeholder="Enter your e-mail"
+                required
+              />{" "}
+              {fullTeam && <button type="submit">Play</button>}
+            </div>
           </form>
         </div>
       </Container>
