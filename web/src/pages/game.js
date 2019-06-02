@@ -32,26 +32,46 @@ const GamePage = props => {
       </Layout>
     );
   }
+
+  const defaultColumnProperties = {
+    sortable: true
+  };
+
+  const columns = [
+    { key: "name", name: "Name" },
+    { key: "team", name: "Team" },
+    { key: "ppg", name: "Ppg" }
+  ].map(c => ({ ...c, ...defaultColumnProperties }));
+
   const playerNodes = data && data.players && mapEdgesToNodes(data.players);
-
-  const columns = [{ key: "name", name: "Name" }, { key: "team", name: "Team" }];
-  const rows = playerNodes;
-
   const [players, setPlayers] = useState([]);
   const [fullTeam, setFullTeam] = useState(false);
+  const [rows, setRows] = useState(playerNodes);
 
   useEffect(() => {
     players.length === 5 ? setFullTeam(true) : setFullTeam(false);
+    console.log(players);
   }, [players]);
 
-  function addPlayer(id, player) {
-    fullTeam ? null : setPlayers(prevPlayers => [...prevPlayers, player]);
+  function addPlayer(_, player) {
+    if (player) fullTeam ? null : setPlayers(prevPlayers => [...prevPlayers, player]);
   }
 
   function removePlayer(index) {
     players.splice(index, 1);
     setPlayers([...players]);
   }
+
+  const sortRows = (initialRows, sortColumn, sortDirection) => rows => {
+    const comparer = (a, b) => {
+      if (sortDirection === "ASC") {
+        return a[sortColumn] > b[sortColumn] ? 1 : -1;
+      } else if (sortDirection === "DESC") {
+        return a[sortColumn] < b[sortColumn] ? 1 : -1;
+      }
+    };
+    return sortDirection === "NONE" ? initialRows : [...rows].sort(comparer);
+  };
 
   return (
     <Layout>
@@ -60,17 +80,20 @@ const GamePage = props => {
         <div>
           <h3 className={responsiveTitle2}>Your team </h3>
           <hr />
-          {players.map((player, index) => (
-            <input
-              key={index}
-              value={player.name}
-              onClick={() => removePlayer(index)}
-              readOnly={true}
-              type="text"
-              name={player.name}
-              required
-            />
-          ))}
+          {players.map(
+            (player, index) =>
+              !!player && (
+                <input
+                  key={index}
+                  value={player.name}
+                  onClick={() => removePlayer(index)}
+                  readOnly={true}
+                  type="text"
+                  name={player.name}
+                  required
+                />
+              )
+          )}
           <form
             name="play"
             method="post"
@@ -80,35 +103,35 @@ const GamePage = props => {
           >
             <input type="hidden" name="form-name" value="play" />
             <input
-              value={players.length > 4 && players[0].name}
+              value={players.length > 4 && players[0] && players[0].name}
               readOnly={true}
               type="hidden"
               name="Player 1"
               required
             />
             <input
-              value={players.length > 4 && players[1].name}
+              value={players.length > 4 && players[1] && players[1].name}
               readOnly={true}
               type="hidden"
               name="Player 2"
               required
             />
             <input
-              value={players.length > 4 && players[2].name}
+              value={players.length > 4 && players[2] && players[2].name}
               readOnly={true}
               type="hidden"
               name="Player 3"
               required
             />
             <input
-              value={players.length > 4 && players[3].name}
+              value={players.length > 4 && players[3] && players[4].name}
               readOnly={true}
               type="hidden"
               name="Player 4"
               required
             />
             <input
-              value={players.length > 4 && players[4].name}
+              value={players.length > 4 && players[4] && players[4].name}
               readOnly={true}
               type="hidden"
               name="Player 5"
@@ -118,9 +141,9 @@ const GamePage = props => {
 
             <div>
               <input
-                type={fullTeam ? "text" : "hidden"}
-                name="name"
-                placeholder="Skriv in ditt jävla namn"
+                type={fullTeam ? "email" : "hidden"}
+                name="email"
+                placeholder="Your email"
                 required
               />{" "}
               {fullTeam && <button type="submit">Play</button>}
@@ -134,8 +157,11 @@ const GamePage = props => {
             columns={columns}
             rowGetter={i => rows[i]}
             rowsCount={rows.length}
-            minHeight={1000}
+            minHeight={400}
             onRowClick={addPlayer}
+            onGridSort={(sortColumn, sortDirection) =>
+              setRows(sortRows(rows, sortColumn, sortDirection))
+            }
           />
         </div>
       </Container>
