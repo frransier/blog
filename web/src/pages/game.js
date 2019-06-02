@@ -37,11 +37,10 @@ const GamePage = props => {
     sortable: true
   };
 
-  const columns = [
-    { key: "name", name: "Name" },
-    { key: "team", name: "Team" },
-    { key: "ppg", name: "Ppg" }
-  ].map(c => ({ ...c, ...defaultColumnProperties }));
+  const columns = [{ key: "name", name: "Name" }, { key: "team", name: "Team" }].map(c => ({
+    ...c,
+    ...defaultColumnProperties
+  }));
 
   const playerNodes = data && data.players && mapEdgesToNodes(data.players);
   const [players, setPlayers] = useState([]);
