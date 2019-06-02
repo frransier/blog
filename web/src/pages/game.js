@@ -41,62 +41,30 @@ const GamePage = props => {
   const [fullTeam, setFullTeam] = useState(false);
 
   useEffect(() => {
-    players.length === 3 ? setFullTeam(true) : setFullTeam(false);
+    players.length === 5 ? setFullTeam(true) : setFullTeam(false);
   }, [players]);
 
-  const addPlayer = player => () => {
+  function addPlayer(id, player) {
     fullTeam ? null : setPlayers(prevPlayers => [...prevPlayers, player]);
-  };
+  }
 
-  const removePlayer = index => () => {
-    const dplayers = players;
-    dplayers.splice(index, 1);
-    setPlayers([...dplayers]);
-  };
-
-  var buttonStyle = { WebkitAppearance: "none", margin: "2.5px" };
+  function removePlayer(index) {
+    players.splice(index, 1);
+    setPlayers([...players]);
+  }
 
   return (
     <Layout>
       <SEO title="Fantasy Football" />
       <Container>
         <div>
-          <h1>Champions League-final</h1>
-          <h4>Deadline 21:00</h4>
-          <p>Liverpool - Tottenham</p>
-          <h4>Regler</h4>
-          <p>
-            Välj 3 olika spelare. <br /> Du får <strong>1p</strong> per{" "}
-            <strong>mål, assist och kort</strong> per spelare.
-          </p>
-          <p>Den eller de som får högst poäng delar på hela potten</p>
-          <p>Pott: 500kr</p>
-        </div>
-        <hr />
-        <div>
-          <h2 className={responsiveTitle1}>Välj ditt jävla lag</h2>
-          <ReactDataGrid
-            columns={columns}
-            rowGetter={i => rows[i]}
-            rowsCount={rows.length}
-            minHeight={150}
-            onRowClick={addPlayer(i => rows[i])}
-          />
-          )
-          {playerNodes.map((player, index) => (
-            <button style={buttonStyle} key={index} onClick={addPlayer(player)} readOnly={true}>
-              {player.name} <br /> {player.team}
-            </button>
-          ))}
-        </div>
-        <div>
-          <h3 className={responsiveTitle2}>Ditt jävla lag </h3>
+          <h3 className={responsiveTitle2}>Your team </h3>
           <hr />
           {players.map((player, index) => (
             <input
               key={index}
               value={player.name}
-              onClick={removePlayer(index)}
+              onClick={() => removePlayer(index)}
               readOnly={true}
               type="text"
               name={player.name}
@@ -112,42 +80,42 @@ const GamePage = props => {
           >
             <input type="hidden" name="form-name" value="play" />
             <input
-              value={players.length > 2 && players[0].name}
+              value={players.length > 4 && players[0].name}
               readOnly={true}
               type="hidden"
               name="Player 1"
               required
             />
             <input
-              value={players.length > 2 && players[1].name}
+              value={players.length > 4 && players[1].name}
               readOnly={true}
               type="hidden"
               name="Player 2"
               required
             />
             <input
-              value={players.length > 2 && players[2].name}
+              value={players.length > 4 && players[2].name}
               readOnly={true}
               type="hidden"
               name="Player 3"
               required
             />
-            {/* <input
-              value={players.length > 2 && players[3].name}
+            <input
+              value={players.length > 4 && players[3].name}
               readOnly={true}
               type="hidden"
               name="Player 4"
               required
             />
             <input
-              value={players.length > 2 && players[4].name}
+              value={players.length > 4 && players[4].name}
               readOnly={true}
               type="hidden"
               name="Player 5"
               required
-            /> */}
+            />
             <input type="hidden" name="yekshemesh" />
-            <hr />
+
             <div>
               <input
                 type={fullTeam ? "text" : "hidden"}
@@ -158,6 +126,17 @@ const GamePage = props => {
               {fullTeam && <button type="submit">Play</button>}
             </div>
           </form>
+        </div>
+        <hr />
+        <div>
+          <h2 className={responsiveTitle1}>Pick your players</h2>
+          <ReactDataGrid
+            columns={columns}
+            rowGetter={i => rows[i]}
+            rowsCount={rows.length}
+            minHeight={1000}
+            onRowClick={addPlayer}
+          />
         </div>
       </Container>
     </Layout>
