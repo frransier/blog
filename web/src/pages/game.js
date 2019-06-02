@@ -6,7 +6,7 @@ import Container from "../components/container";
 import GraphQLErrorList from "../components/graphql-error-list";
 import SEO from "../components/seo";
 import Layout from "../containers/layout";
-//import MaterialTable from "material-table";
+import ReactDataGrid from "react-data-grid";
 
 import { responsiveTitle1, responsiveTitle2 } from "../components/typography.module.css";
 
@@ -32,10 +32,13 @@ const GamePage = props => {
       </Layout>
     );
   }
+  const playerNodes = data && data.players && mapEdgesToNodes(data.players);
+
+  const columns = [{ key: "name", name: "Name" }, { key: "team", name: "Team" }];
+  const rows = playerNodes;
 
   const [players, setPlayers] = useState([]);
   const [fullTeam, setFullTeam] = useState(false);
-  const playerNodes = data && data.players && mapEdgesToNodes(data.players);
 
   useEffect(() => {
     players.length === 3 ? setFullTeam(true) : setFullTeam(false);
@@ -72,7 +75,14 @@ const GamePage = props => {
         <hr />
         <div>
           <h2 className={responsiveTitle1}>Välj ditt jävla lag</h2>
-
+          <ReactDataGrid
+            columns={columns}
+            rowGetter={i => rows[i]}
+            rowsCount={rows.length}
+            minHeight={150}
+            onRowClick={addPlayer(i => rows[i])}
+          />
+          )
           {playerNodes.map((player, index) => (
             <button style={buttonStyle} key={index} onClick={addPlayer(player)} readOnly={true}>
               {player.name} <br /> {player.team}
