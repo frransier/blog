@@ -17,6 +17,11 @@ export default {
       name: 'included',
       type: 'boolean',
       title: 'Included'
+    },
+    {
+      name: 'ppg',
+      type: 'number',
+      title: 'Points per game'
     }
   ]
 }
