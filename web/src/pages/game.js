@@ -103,8 +103,6 @@ const GamePage = props => {
   }
 
   async function handleToken(token) {
-    console.log(token);
-
     const response = await axios.post("http://localhost:34567/purchase", {
       token
     });
