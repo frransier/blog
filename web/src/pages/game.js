@@ -6,6 +6,11 @@ import Container from "../components/container";
 import GraphQLErrorList from "../components/graphql-error-list";
 import SEO from "../components/seo";
 import Layout from "../containers/layout";
+import StripeCheckout from "react-stripe-checkout";
+import axios from "axios";
+import { toast } from "react-toastify";
+
+toast.configure();
 
 import { responsiveTitle1, responsiveTitle2 } from "../components/typography.module.css";
 
@@ -35,7 +40,11 @@ const GamePage = props => {
   }
 
   const playerNodes = data && data.team && mapEdgesToNodes(data.team);
-
+  const price = 150;
+  const [product] = useState({
+    name: "Playmaker team",
+    price: 150
+  });
   const [fullTeam, setFullTeam] = useState(false);
 
   const [players, playerDispatch] = useReducer((state, action) => {
@@ -93,6 +102,20 @@ const GamePage = props => {
     });
   }
 
+  async function handleToken(token) {
+    console.log(token);
+
+    const response = await axios.post("http://localhost:34567/purchase", {
+      token
+    });
+    const { status } = response.data;
+    if (status === "success") {
+      toast("Success! Check yer mail", { type: "success" });
+    } else {
+      toast("Oops", { type: "error" });
+    }
+  }
+
   return (
     <Layout>
       <SEO title="Fantasy Football" />
@@ -105,61 +128,11 @@ const GamePage = props => {
               {player.name}
             </div>
           ))}
-          <form
-            name="play"
-            method="post"
-            action="/welcome/"
-            data-netlify="true"
-            data-netlify-honeypot="yekshemesh"
-          >
-            <input type="hidden" name="form-name" value="play" />
-            <input
-              value={team.length > 4 && team[0].name}
-              readOnly={true}
-              type="hidden"
-              name="Player 1"
-              required
-            />
-            <input
-              value={team.length > 4 && team[1].name}
-              readOnly={true}
-              type="hidden"
-              name="Player 2"
-              required
-            />
-            <input
-              value={team.length > 4 && team[2].name}
-              readOnly={true}
-              type="hidden"
-              name="Player 3"
-              required
-            />
-            <input
-              value={team.length > 4 && team[3].name}
-              readOnly={true}
-              type="hidden"
-              name="Player 4"
-              required
-            />
-            <input
-              value={team.length > 4 && team[4].name}
-              readOnly={true}
-              type="hidden"
-              name="Player 5"
-              required
-            />
-            <input type="hidden" name="yekshemesh" />
-
-            <div>
-              <input
-                type={fullTeam ? "email" : "hidden"}
-                name="email"
-                placeholder="Your email"
-                required
-              />{" "}
-              {fullTeam && <button type="submit">Play</button>}
-            </div>
-          </form>
+          <StripeCheckout
+            stripeKey="pk_test_l8W1EmByGfRsVvD82jTrOvN400z9mmMMsh"
+            token={handleToken}
+            amount={price * 100}
+          />
         </div>
         <hr />
         <div>
